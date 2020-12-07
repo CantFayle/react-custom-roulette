@@ -40,13 +40,21 @@ interface Props {
   fontSize?: number;
   perpendicularText?: boolean;
   textDistance?: number;
+  width?: number;
+  height?: number;
+  startSpinningTime?: number;
+  continueSpinningTime?: number;
+  stopSpinningTime?: number;
 }
 
 const STARTED_SPINNING = 'started-spinning';
 
-const START_SPINNING_TIME = 2600;
-const CONTINUE_SPINNING_TIME = 750;
-const STOP_SPINNING_TIME = 8000;
+const DEFAULT_START_SPINNING_TIME = 2600;
+const DEFAULT_CONTINUE_SPINNING_TIME = 750;
+const DEFAULT_STOP_SPINNING_TIME = 8000;
+
+const DEFAULT_WIDTH = 900;
+const DEFAULT_HEIGHT = 900;
 
 export const Wheel = ({
   mustStartSpinning,
@@ -65,6 +73,11 @@ export const Wheel = ({
   fontSize = DEFAULT_FONT_SIZE,
   perpendicularText = false,
   textDistance = DEFAULT_TEXT_DISTANCE,
+  width = DEFAULT_WIDTH,
+  height = DEFAULT_HEIGHT,
+  startSpinningTime = DEFAULT_START_SPINNING_TIME,
+  continueSpinningTime = DEFAULT_CONTINUE_SPINNING_TIME,
+  stopSpinningTime = DEFAULT_STOP_SPINNING_TIME
 }: Props) => {
   const wheelData = useRef<WheelData[]>([...data]);
   const [startRotationDegrees, setStartRotationDegrees] = useState(0);
@@ -124,7 +137,7 @@ export const Wheel = ({
         setHasStoppedSpinning(true);
         onStopSpinning();
       }
-    }, START_SPINNING_TIME + CONTINUE_SPINNING_TIME + STOP_SPINNING_TIME - 300);
+    }, startSpinningTime + continueSpinningTime + stopSpinningTime - 300);
   };
 
   const getRouletteClass = () => {
@@ -142,15 +155,15 @@ export const Wheel = ({
     <RouletteContainer>
       <RotationContainer
         className={getRouletteClass()}
-        startSpinningTime={START_SPINNING_TIME}
-        continueSpinningTime={CONTINUE_SPINNING_TIME}
-        stopSpinningTime={STOP_SPINNING_TIME}
+        startSpinningTime={startSpinningTime}
+        continueSpinningTime={continueSpinningTime}
+        stopSpinningTime={stopSpinningTime}
         startRotationDegrees={startRotationDegrees}
         finalRotationDegrees={finalRotationDegrees}
       >
         <WheelCanvas
-          width="900"
-          height="900"
+          width={width ? width.toString() : DEFAULT_WIDTH.toString()}
+          height={height ? height.toString() : DEFAULT_HEIGHT.toString()}
           data={wheelData.current}
           outerBorderColor={outerBorderColor}
           outerBorderWidth={outerBorderWidth}
